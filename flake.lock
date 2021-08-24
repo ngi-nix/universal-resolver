@@ -18,7 +18,25 @@
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
+        "universal-resolver-src": "universal-resolver-src",
         "utils": "utils"
+      }
+    },
+    "universal-resolver-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1629446166,
+        "narHash": "sha256-rZKmnlxudAuOQql6r0Le1tZXRfKXkzBBIXza5VV5Mng=",
+        "owner": "decentralized-identity",
+        "repo": "universal-resolver",
+        "rev": "5c2147f7992dd2c622aaf659309131e4cb881c05",
+        "type": "github"
+      },
+      "original": {
+        "owner": "decentralized-identity",
+        "repo": "universal-resolver",
+        "rev": "5c2147f7992dd2c622aaf659309131e4cb881c05",
+        "type": "github"
       }
     },
     "utils": {

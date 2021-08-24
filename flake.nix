@@ -4,23 +4,22 @@
   inputs = {
     utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:NixOS/nixpkgs";
+    universal-resolver-src = {
+      url = "github:decentralized-identity/universal-resolver/5c2147f7992dd2c622aaf659309131e4cb881c05";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, utils }:
+  outputs = { self, nixpkgs, utils, universal-resolver-src }:
     utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages."${system}";
-        src = pkgs.fetchFromGitHub {
-          owner = "decentralized-identity";
-          repo = "universal-resolver";
-          rev = "5c2147f7992dd2c622aaf659309131e4cb881c05";
-          sha256 = "0y1jg5aybnkw450k14wpy92mgmnnvr1ayym98a70nx3fbjgad4md";
-        };
+        src = universal-resolver-src;
         repository = pkgs.stdenv.mkDerivation {
           name = "maven-repository";
           buildInputs = with pkgs; [ maven ];
 
-          inherit src;
+          src = universal-resolver-src;
 
           buildPhase = ''
             mvn package -Dmaven.repo.local=$out
@@ -50,7 +49,7 @@
           name = "uni-resolver-web";
           version = "0.3-SNAPSHOT";
 
-          inherit src;
+          src = universal-resolver-src;
 
           buildInputs = with pkgs; [ maven ];
 
