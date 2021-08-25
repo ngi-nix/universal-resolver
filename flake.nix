@@ -15,6 +15,13 @@
       let
         pkgs = nixpkgs.legacyPackages."${system}";
         src = universal-resolver-src;
+        # TODO remove this once [this](https://github.com/NixOS/nixpkgs/pull/132287#pullrequestreview-736233478) gets merged
+        modifiedJetty = pkgs.jetty.overrideAttrs (oldAttrs: rec {
+          installPhase = ''
+            mkdir -p $out
+            mv bin etc lib modules start.ini start.jar $out
+          '';
+        });
         repository = pkgs.stdenv.mkDerivation {
           name = "maven-repository";
           buildInputs = with pkgs; [ maven ];
@@ -63,8 +70,8 @@
             cp config.json $out/config.json
             cp uni-resolver-web/target/${pname}-${version}.war $out/webapps/ROOT.war
             cd $out
-            ${pkgs.adoptopenjdk-bin}/bin/java -jar ${pkgs.jetty}/start.jar --create-startd
-            ${pkgs.adoptopenjdk-bin}/bin/java -jar ${pkgs.jetty}/start.jar --add-to-start=http,deploy,websocket,ext,jsp,jstl,resources,server
+            ${pkgs.adoptopenjdk-bin}/bin/java -jar ${modifiedJetty}/start.jar --create-startd
+            ${pkgs.adoptopenjdk-bin}/bin/java -jar ${modifiedJetty}/start.jar --add-to-start=http,deploy,websocket,ext,jsp,jstl,resources,server
           '';
         };
         defaultPackage = packages.uni-resolver-web;
@@ -77,7 +84,7 @@
 
         # `nix develop`
         devShell = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ adoptopenjdk-bin maven jetty ];
+          nativeBuildInputs = with pkgs; [ adoptopenjdk-bin maven modifiedJetty ];
         };
       });
 }
