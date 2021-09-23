@@ -25,11 +25,8 @@
               '';
             }
           );
-          repository = pkgs.stdenv.mkDerivation {
-            name = "maven-repository";
-            buildInputs = with pkgs; [ maven ];
-
-            src = universal-resolver-src;
+          generic-repository = pkgs.stdenv.mkDerivation {
+            nativeBuildInputs = with pkgs; [ maven ];
 
             buildPhase = ''
               mvn package -Dmaven.repo.local=$out
@@ -48,9 +45,14 @@
             dontFixup = true;
             outputHashAlgo = "sha256";
             outputHashMode = "recursive";
-            # replace this with the correct SHA256
-            outputHash = "sha256-1HmNyuymu6uIu8/d5zobjZ08a0fMC8ZapAT2/Upph/I=";
           };
+          universal-resolver-repository = generic-repository.overrideAttrs (
+            oldAttrs: {
+              name = "universal-resolver-repository";
+              src = universal-resolver-src;
+              outputHash = "sha256-lnjizQvaz4gRxqQX76ERDxhEN1QH7D5iUEorljDU/ho=";
+            }
+          );
         in
           rec {
             # `nix build`
@@ -64,8 +66,8 @@
               buildInputs = with pkgs; [ maven ];
 
               buildPhase = ''
-                echo "Using repository ${repository}"
-                mvn --offline -Dmaven.repo.local=${repository} package
+                echo "Using repository ${universal-resolver-repository}"
+                mvn --offline -Dmaven.repo.local=${universal-resolver-repository} package
               '';
 
               installPhase = ''
