@@ -25,17 +25,17 @@
     "universal-resolver-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1629446166,
-        "narHash": "sha256-rZKmnlxudAuOQql6r0Le1tZXRfKXkzBBIXza5VV5Mng=",
+        "lastModified": 1629549660,
+        "narHash": "sha256-BpiG07Ge2vzNemZnUyPemHdhrv70W8TDTJh4gyBSB7M=",
         "owner": "decentralized-identity",
         "repo": "universal-resolver",
-        "rev": "5c2147f7992dd2c622aaf659309131e4cb881c05",
+        "rev": "8390e7a93a75b5fa7fa7ab4904d12f0a53c104b8",
         "type": "github"
       },
       "original": {
         "owner": "decentralized-identity",
+        "ref": "v0.4.0",
         "repo": "universal-resolver",
-        "rev": "5c2147f7992dd2c622aaf659309131e4cb881c05",
         "type": "github"
       }
     },
