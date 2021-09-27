@@ -1,5 +1,39 @@
 {
   "nodes": {
+    "driver-btcr-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1629890128,
+        "narHash": "sha256-QpEymd+yuIEN1NjFRLXE2jss16gnbsNxI/dxVFqMOqE=",
+        "owner": "decentralized-identity",
+        "repo": "uni-resolver-driver-did-btcr",
+        "rev": "4b303443747bb85fc2ec7f643c0092cce79d05d4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "decentralized-identity",
+        "ref": "0.1.0",
+        "repo": "uni-resolver-driver-did-btcr",
+        "type": "github"
+      }
+    },
+    "driver-sov-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1629904239,
+        "narHash": "sha256-fco3EHNtBaqU7XYcEoD68TbPiM+EQDDMm80kT32Mp1M=",
+        "owner": "decentralized-identity",
+        "repo": "uni-resolver-driver-did-sov",
+        "rev": "292c1c45bb8abd0dc33f8743059710188b77b4e9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "decentralized-identity",
+        "ref": "0.2.0",
+        "repo": "uni-resolver-driver-did-sov",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1629718683,
@@ -17,6 +51,8 @@
     },
     "root": {
       "inputs": {
+        "driver-btcr-src": "driver-btcr-src",
+        "driver-sov-src": "driver-sov-src",
         "nixpkgs": "nixpkgs",
         "universal-resolver-src": "universal-resolver-src",
         "utils": "utils"
