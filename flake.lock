@@ -34,7 +34,42 @@
         "type": "github"
       }
     },
+    "mvn2nix": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1629170129,
+        "narHash": "sha256-v/HvYqzkPaGin1ujo+Fi59wXC9vWxW3lYVSwElORRi8=",
+        "owner": "fzakaria",
+        "repo": "mvn2nix",
+        "rev": "ea21cfe97069feee55fa307ca9b125616c1fa84f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fzakaria",
+        "repo": "mvn2nix",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1625176478,
+        "narHash": "sha256-s1RTYNKw7ySyqrZjns9Cq+Nnjpp75ePgL06pgcbIpoA=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "21b696caf392ad6fa513caf3327d0aa0430ffb72",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-21.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1629718683,
         "narHash": "sha256-QnCH+U0TwiQR/mS0K9BiotvejUAD+kj+2YDTsIan+hA=",
@@ -53,9 +88,10 @@
       "inputs": {
         "driver-btcr-src": "driver-btcr-src",
         "driver-sov-src": "driver-sov-src",
-        "nixpkgs": "nixpkgs",
+        "mvn2nix": "mvn2nix",
+        "nixpkgs": "nixpkgs_2",
         "universal-resolver-src": "universal-resolver-src",
-        "utils": "utils"
+        "utils": "utils_2"
       }
     },
     "universal-resolver-src": {
@@ -76,6 +112,21 @@
       }
     },
     "utils": {
+      "locked": {
+        "lastModified": 1623875721,
+        "narHash": "sha256-A8BU7bjS5GirpAUv4QA+QnJ4CceLHkcXdRp4xITDB0s=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "f7e004a55b120c02ecb6219596820fcd32ca8772",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "utils_2": {
       "locked": {
         "lastModified": 1629481132,
         "narHash": "sha256-JHgasjPR0/J1J3DRm4KxM4zTyAj4IOJY8vIl75v/kPI=",

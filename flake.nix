@@ -4,6 +4,7 @@
   inputs = {
     utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:NixOS/nixpkgs";
+    mvn2nix.url = "github:fzakaria/mvn2nix";
     universal-resolver-src = {
       url = "github:decentralized-identity/universal-resolver/v0.4.0";
       flake = false;
@@ -18,7 +19,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, utils, universal-resolver-src, driver-sov-src, driver-btcr-src }:
+  outputs = { self, nixpkgs, utils, mvn2nix, universal-resolver-src, driver-sov-src, driver-btcr-src }:
     utils.lib.eachDefaultSystem (
       system:
         let
@@ -33,54 +34,10 @@
               '';
             }
           );
-          generic-repository = pkgs.stdenv.mkDerivation {
-            nativeBuildInputs = with pkgs; [ maven ];
-
-            buildPhase = ''
-              mvn package -Dmaven.repo.local=$out
-            '';
-
-            # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-            installPhase = ''
-              find $out -type f \
-                -name \*.lastUpdated -or \
-                -name resolver-status.properties -or \
-                -name _remote.repositories \
-                -delete
-            '';
-
-            # don't do any fixup
-            dontFixup = true;
-            outputHashAlgo = "sha256";
-            outputHashMode = "recursive";
-          };
-          universal-resolver-repository = generic-repository.overrideAttrs (
-            oldAttrs: {
-              name = "universal-resolver-repository";
-              src = universal-resolver-src;
-              outputHash = "sha256-lnjizQvaz4gRxqQX76ERDxhEN1QH7D5iUEorljDU/ho=";
-            }
-          );
-          driver-sov-repository = generic-repository.overrideAttrs (
-            oldAttrs: {
-              name = "driver-sov-repository";
-              src = driver-sov-src;
-              buildPhase = ''
-                mvn package -P war -Dmaven.repo.local=$out
-              '';
-              outputHash = "sha256-Ah5G/eaiXcOfAklodrtf0F5S8+2QaQgtVWPKFlF4Dcg=";
-            }
-          );
-          driver-btcr-repository = generic-repository.overrideAttrs (
-            oldAttrs: {
-              name = "driver-btcr-repository";
-              src = driver-btcr-src;
-              buildPhase = ''
-                mvn package -Dmaven.repo.local=$out
-              '';
-              outputHash = pkgs.lib.fakeHash; #"";
-            }
-          );
+          inherit (mvn2nix.legacyPackages."${system}") buildMavenRepositoryFromLockFile;
+          universal-resolver-repository = buildMavenRepositoryFromLockFile { file = ./universal-resolver-mvn2nix-lock.json; };
+          driver-sov-repository = buildMavenRepositoryFromLockFile { file = ./driver-sov-mvn2nix-lock.json; };
+          driver-btcr-repository = buildMavenRepositoryFromLockFile { file = ./driver-btcr-mvn2nix-lock.json; };
         in
           rec {
             # `nix build`
@@ -121,9 +78,8 @@
 
               installPhase = ''
                 mkdir -p $out/sovrin
-                cp -r sovrin $out/sovrin
+                cp -r sovrin/* -t $out/sovrin
                 mkdir -p $out/webapps
-                ls target/
                 cp target/*.war $out/webapps/ROOT.war
                 cd $out
                 ${pkgs.adoptopenjdk-bin}/bin/java -jar ${modifiedJetty}/start.jar --create-startd
@@ -145,8 +101,7 @@
 
               installPhase = ''
                 mkdir -p $out/webapps
-                ls target/
-                cp target/*.war -t $out/webapps/ROOT.war
+                cp target/*.war $out/webapps/ROOT.war
                 cd $out
                 ${pkgs.adoptopenjdk-bin}/bin/java -jar ${modifiedJetty}/start.jar --create-startd
                 ${pkgs.adoptopenjdk-bin}/bin/java -jar ${modifiedJetty}/start.jar --add-to-start=http,deploy,websocket,ext,jsp,jstl,resources,server
